@@ -1,4 +1,4 @@
-package kaidan.frontend
+package skalaton.frontend
 
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
@@ -19,7 +19,7 @@ object Page {
     override val title: String = "Home"
     override def render(context: PageContext): TagMod =
       <.div(^.className := "container",
-        <.h1("Welcome to kaidan!"),
+        <.h1("Welcome to Skalaton!"),
         <.div(
           <.p("Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
             " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," +

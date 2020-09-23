@@ -1,8 +1,8 @@
-package kaidan.webapp.routes
+package skalaton.webapp.routes
 
 import cats.effect.IO
 import cats.implicits._
-import kaidan.webapp.IntegrationTest
+import skalaton.webapp.IntegrationTest
 import org.http4s.Method.GET
 import org.http4s.headers.`Content-Type`
 import org.http4s.implicits._

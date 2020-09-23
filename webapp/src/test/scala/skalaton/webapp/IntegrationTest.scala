@@ -1,4 +1,4 @@
-package kaidan.webapp
+package skalaton.webapp
 
 import cats.data.Kleisli
 import cats.effect.{Blocker, IO, Resource}

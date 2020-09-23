@@ -1,4 +1,4 @@
-package kaidan.webapp.routes
+package skalaton.webapp.routes
 
 import cats.effect.{Blocker, ContextShift, IO}
 import org.http4s.Method.GET

@@ -1,4 +1,4 @@
-package kaidan.frontend
+package skalaton.frontend
 
 import japgolly.scalajs.react.extra.router.{BaseUrl, Router, RouterConfigDsl}
 import japgolly.scalajs.react.extra.router.SetRouteVia.HistoryReplace

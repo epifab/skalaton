@@ -1,7 +1,7 @@
-package kaidan.webapp
+package skalaton.webapp
 
 import cats.effect.{Blocker, ExitCode, IO, IOApp}
-import kaidan.webapp.routes.{Health, Home, Static}
+import skalaton.webapp.routes.{Health, Home, Static}
 import org.fusesource.scalate.TemplateEngine
 import org.http4s.HttpRoutes
 import org.http4s.implicits._

@@ -1,4 +1,4 @@
-package kaidan.webapp.routes
+package skalaton.webapp.routes
 
 import cats.effect.IO
 import org.fusesource.scalate.TemplateEngine
