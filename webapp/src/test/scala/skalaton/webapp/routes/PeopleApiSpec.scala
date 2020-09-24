@@ -1,8 +1,9 @@
 package skalaton.webapp.routes
 
 import java.time.LocalDate
+import java.util.UUID
 
-import skalaton.domain.services.AddPersonRequest
+import skalaton.domain.services.{AddPersonRequest, ServiceError}
 import skalaton.webapp.IntegrationTest
 import skalaton.webapp.services.PeopleServiceApiClient
 
@@ -26,5 +27,9 @@ class PeopleApiSpec extends IntegrationTest {
     } yield person -> people).unsafeRunSync()
 
     people.getOrElse(fail("Could not get a list of people")) must not contain person.getOrElse(fail("The person could not be created"))
+  }
+
+  "Non-existing people cannot be deleted" in {
+    client.removePerson(UUID.randomUUID()).unsafeRunSync() mustBe Left(ServiceError.NotFound)
   }
 }

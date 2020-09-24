@@ -9,6 +9,7 @@ import org.http4s.circe.CirceEntityDecoder._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.implicits._
 import org.http4s.{Request, Response, Uri}
+import org.scalatest.Assertions.fail
 import skalaton.domain.services.{AddPersonRequest, PeopleService, PersonDetails, ServiceError}
 
 class PeopleServiceApiClient(client: Request[IO] => IO[Response[IO]]) extends PeopleService[IO] {
@@ -17,10 +18,9 @@ class PeopleServiceApiClient(client: Request[IO] => IO[Response[IO]]) extends Pe
     response.as[ServiceError]
       .attempt
       .map {
-        case Left(e) => Left(ServiceError.InternalError(e.getMessage))
+        case Left(e) => fail(s"Fail to decode the - not successful - response: ${e.getMessage}. Response was: ${response.status}")
         case Right(e) => Left(e)
       }
-
 
   override def addPerson(request: AddPersonRequest): IO[Either[ServiceError, PersonDetails]] =
     client(Request(POST, uri"/api/people").withEntity(request.asJson)).flatMap {

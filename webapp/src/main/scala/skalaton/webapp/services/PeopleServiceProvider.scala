@@ -31,6 +31,11 @@ class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], addre
 
   override def removePerson(id: UUID): F[Either[ServiceError, Unit]] =
     (for {
+      person <- handleFailure(personRepo.findById(id))
+      _ <- EitherT.fromEither[F](person match {
+        case None => Left(ServiceError.NotFound)
+        case Some(_) => Right(())
+      })
       _ <- handleFailure(addressRepo.remove(id))
       _ <- handleFailure(personRepo.remove(id))
     } yield ()).value

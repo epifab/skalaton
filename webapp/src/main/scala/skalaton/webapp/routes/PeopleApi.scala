@@ -11,9 +11,9 @@ import skalaton.domain.services.{AddPersonRequest, PeopleService, ServiceError}
 
 object PeopleApi {
   private def handleError(serviceError: ServiceError): IO[Response[IO]] = serviceError match {
-    case ServiceError.NotFound => NotFound()
-    case ServiceError.BadRequest(reason) => BadRequest(reason)
-    case error => InternalServerError(error.asJson)
+    case ServiceError.NotFound => NotFound(serviceError.asJson)
+    case ServiceError.BadRequest(_) => BadRequest(serviceError.asJson)
+    case _ => InternalServerError(serviceError.asJson)
   }
 
   def routes(peopleService: PeopleService[IO]): HttpRoutes[IO] = HttpRoutes.of[IO] {
