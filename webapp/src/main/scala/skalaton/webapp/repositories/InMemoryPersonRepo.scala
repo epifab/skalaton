@@ -7,7 +7,7 @@ import skalaton.domain.model.Person
 import skalaton.domain.repositories.PersonRepo
 import scala.collection.mutable.ListBuffer
 
-class InMemoryPersonRepo extends PersonRepo[IO] {
+object InMemoryPersonRepo extends PersonRepo[IO] {
 
   private val people: ListBuffer[Person] = ListBuffer.empty
 
@@ -21,6 +21,6 @@ class InMemoryPersonRepo extends PersonRepo[IO] {
     IO.pure(people.addOne(person))
 
   override def remove(id: UUID): IO[Unit] =
-    IO.pure(people.filterInPlace(_.id == id))
+    IO.pure(people.filterInPlace(_.id != id))
 
 }

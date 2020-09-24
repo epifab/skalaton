@@ -8,7 +8,7 @@ import skalaton.domain.repositories.AddressRepo
 
 import scala.collection.mutable.ListBuffer
 
-class InMemoryAddressRepo extends AddressRepo[IO] {
+object InMemoryAddressRepo extends AddressRepo[IO] {
 
   private val addresses: ListBuffer[Address] = ListBuffer.empty
 
@@ -19,6 +19,6 @@ class InMemoryAddressRepo extends AddressRepo[IO] {
     IO.pure(addresses.addOne(person))
 
   override def remove(id: UUID): IO[Unit] =
-    IO.pure(addresses.filterInPlace(_.personId == id))
+    IO.pure(addresses.filterInPlace(_.personId != id))
 
 }
