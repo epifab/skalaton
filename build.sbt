@@ -57,14 +57,23 @@ lazy val frontend = (project in file("frontend"))
   .dependsOn(domain.js % "compile->compile;test->test")
   .settings(
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0",
-      "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0",
+      // scalajs
+      "org.scala-js" %%% "scalajs-dom" % "1.1.0",
+      // circe
       "io.circe" %%% "circe-core" % circeVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
-      "org.scala-js" %%% "scalajs-dom" % "1.1.0",
-      "com.github.japgolly.scalajs-react" %%% "core" % "1.7.5",
-      "com.github.japgolly.scalajs-react" %%% "extra" % "1.7.5"
+      // scala java-time
+      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0",
+      "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0",
+      // scalajs-react
+      "com.github.japgolly.scalajs-react" %%% "core"  % "1.7.5",
+      "com.github.japgolly.scalajs-react" %%% "extra" % "1.7.5",
+      "com.github.japgolly.scalajs-react" %%% "test"  % "1.7.5" % Test,
+      // test-state
+      "com.github.japgolly.test-state" %%% "core"              % "2.4.1" % Test,
+      "com.github.japgolly.test-state" %%% "dom-zipper"        % "2.4.1" % Test,
+      "com.github.japgolly.test-state" %%% "dom-zipper-sizzle" % "2.4.1" % Test
     ),
     dependencyOverrides += "org.webjars.npm" % "js-tokens" % "3.0.2",
     jsDependencies ++= Seq(
@@ -86,6 +95,12 @@ lazy val frontend = (project in file("frontend"))
         minified     "umd/react-dom-server.browser.production.min.js"
         dependsOn    "umd/react-dom.development.js"
         commonJSName "ReactDOMServer",
+
+      "org.webjars.npm" % "react-dom" % reactVersion % Test
+        /            "umd/react-dom-test-utils.development.js"
+        minified     "umd/react-dom-test-utils.production.min.js"
+        dependsOn    "umd/react-dom.development.js"
+        commonJSName "ReactTestUtils",
 
       "org.webjars.npm" % "js-cookie" % "2.2.1"
         /            "js.cookie.js"
