@@ -5,9 +5,9 @@ import japgolly.scalajs.react.{Callback, ReactEvent}
 import org.scalajs.dom.html.Element
 
 
-class Icon(name: String, style: Style = Style.Solid) {
+class Icon(name: String, style: Style = Style.Solid, spin: Boolean = false) {
   def apply(size: Size = Size.Regular, onClick: Callback = Callback.empty): VdomTagOf[Element] =
-    <.i(^.className := s"fa-$name fa-$style fa-$size",
+    <.i(^.className := (List(s"fa-$name", s"fa-$style", s"fa-$size") ++ (if (spin) List("fa-spin") else List.empty)).mkString(" "),
       ^.onClick ==> ((event: ReactEvent) => Callback(event.preventDefault()) >> onClick)
     )
 }
@@ -27,5 +27,7 @@ object Icon {
   val square = new Icon("square")
 
   val squareTick = new Icon("check-square")
+
+  val spin = new Icon("spinner", spin = true)
 
 }
