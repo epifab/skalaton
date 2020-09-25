@@ -21,7 +21,7 @@ class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], conta
   override def addPerson(request: AddPersonRequest): F[Either[ServiceError, PersonDetails]] =
     (for {
       id <- EitherT.right[ServiceError](Sync[F].delay(UUID.randomUUID))
-      person = Person(id, request.name, request.dateOfBirth)
+      person = Person(id, request.name)
       contacts = request.contacts.map(cd => Contact(id, cd.value, cd.contactType))
       _ <- handleFailure(personRepo.add(person))
       _ <- handleFailure(contacts.map(contactRepo.add).sequence)

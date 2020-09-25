@@ -19,7 +19,7 @@ object ContactData {
   implicit val codec: Codec[ContactData] = deriveCodec
 }
 
-case class AddPersonRequest(name: String, dateOfBirth: LocalDate, contacts: List[ContactData])
+case class AddPersonRequest(name: String, contacts: List[ContactData])
 
 object AddPersonRequest {
   implicit val codec: Codec[AddPersonRequest] = deriveCodec

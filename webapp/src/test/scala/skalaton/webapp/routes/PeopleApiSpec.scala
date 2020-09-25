@@ -1,6 +1,5 @@
 package skalaton.webapp.routes
 
-import java.time.LocalDate
 import java.util.UUID
 
 import skalaton.domain.model.ContactType.{Email, Phone}
@@ -9,11 +8,11 @@ import skalaton.webapp.IntegrationTest
 import skalaton.webapp.services.PeopleServiceApiClient
 
 class PeopleApiSpec extends IntegrationTest {
+
   val client = new PeopleServiceApiClient(run)
 
   private val addPersonRequest = AddPersonRequest(
     "John Doe",
-    LocalDate.of(1970, 1, 1),
     List(
       ContactData("+4476554321", Phone),
       ContactData("john@doe.com", Email)
@@ -42,4 +41,5 @@ class PeopleApiSpec extends IntegrationTest {
   "Non-existing people cannot be deleted" in {
     client.removePerson(UUID.randomUUID()).unsafeRunSync() mustBe Left(ServiceError.NotFound)
   }
+
 }

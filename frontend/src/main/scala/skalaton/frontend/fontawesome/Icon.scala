@@ -6,9 +6,12 @@ import org.scalajs.dom.html.Element
 
 
 class Icon(name: String, style: Style = Style.Solid, spin: Boolean = false) {
-  def apply(size: Size = Size.Regular, onClick: Callback = Callback.empty): VdomTagOf[Element] =
-    <.i(^.className := (List(s"fa-$name", s"fa-$style", s"fa-$size") ++ (if (spin) List("fa-spin") else List.empty)).mkString(" "),
-      ^.onClick ==> ((event: ReactEvent) => Callback(event.preventDefault()) >> onClick)
+  def apply(size: Size = Size.Regular, onClick: Option[Callback] = None): VdomTagOf[Element] =
+    <.i(^.className := (List(s"fa-$name", style.toString, s"fa-$size") ++ (if (spin) List("fa-spin") else List.empty)).mkString(" "),
+      onClick.whenDefined { onClick => TagMod(
+        ^.onClick ==> ((event: ReactEvent) => onClick),
+        ^.cursor := "pointer"
+      )}
     )
 }
 
@@ -30,7 +33,7 @@ object Icon {
 
   val phone = new Icon("phone")
 
-  val email = new Icon("envolope")
+  val email = new Icon("envelope")
 
   val spin = new Icon("spinner", spin = true)
 

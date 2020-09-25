@@ -4,29 +4,40 @@ import japgolly.scalajs.react.CtorType
 import japgolly.scalajs.react.component.ScalaFn
 import japgolly.scalajs.react.component.ScalaFn.{Component, Unmounted}
 import japgolly.scalajs.react.extra.router.RouterCtl
-import japgolly.scalajs.react.vdom.TagOf
 import japgolly.scalajs.react.vdom.html_<^._
-import org.scalajs.dom.html.{Div, Element}
-import skalaton.frontend.people.PeopleTable
+import skalaton.frontend.bootstrap.scaffolding.Container
+import skalaton.frontend.people.{PeopleTable, PersonForm}
 
 case class PageContext(router: RouterCtl[Page])
 
 sealed trait Page {
   def key: String
   def title: String
-  def render(context: PageContext): TagOf[Element]
+  def render(context: PageContext): TagMod
 }
 
 object Page {
 
-  case object Home extends Page {
+  case object PeopleListing extends Page {
     override def key: String = "home"
     override val title: String = "Home"
-    override def render(context: PageContext): TagOf[Div] =
-      <.div(^.className := "container",
+    override def render(context: PageContext): TagMod = {
+      Container(
         <.h1("Welcome to Skalaton!"),
-        PeopleTable()
+        PeopleTable(context)
       )
+    }
+  }
+
+  case object NewPersonForm extends Page {
+    override def key: String = "new-person"
+    override def title: String = "Add a new person"
+    override def render(context: PageContext): TagMod =
+      Container(
+        <.h1("Create a new person"),
+        PersonForm(context, None)
+      )
+
   }
 
 }

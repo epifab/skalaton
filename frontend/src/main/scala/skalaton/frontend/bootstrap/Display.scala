@@ -1,4 +1,4 @@
-package skalaton.frontend.bootstrap.styles
+package skalaton.frontend.bootstrap
 
 sealed abstract class Display(id: String) {
   override def toString: String = id

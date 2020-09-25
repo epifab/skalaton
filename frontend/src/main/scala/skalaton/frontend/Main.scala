@@ -9,8 +9,9 @@ object Main extends App {
     import dsl._
 
     (emptyRule
-      | staticRoute("/", Page.Home) ~> renderR(PageWrapper(_, Page.Home))
-      ).notFound(redirectToPage(Page.Home)(HistoryReplace))
+      | staticRoute("/", Page.PeopleListing) ~> renderR(PageWrapper(_, Page.PeopleListing))
+      | staticRoute("/new-user", Page.NewPersonForm) ~> renderR(PageWrapper(_, Page.NewPersonForm))
+      ).notFound(redirectToPage(Page.PeopleListing)(HistoryReplace))
   }
 
   private val router = Router(BaseUrl.fromWindowOrigin, routerConfig)

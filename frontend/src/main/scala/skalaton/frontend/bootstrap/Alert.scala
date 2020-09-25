@@ -5,7 +5,6 @@ import japgolly.scalajs.react.component.ScalaFn.Unmounted
 import japgolly.scalajs.react.preventDefault
 import japgolly.scalajs.react.vdom.TagMod
 import japgolly.scalajs.react.vdom.html_<^._
-import skalaton.frontend.bootstrap.styles.Style
 import skalaton.frontend.fontawesome.Icon
 
 object Alert {

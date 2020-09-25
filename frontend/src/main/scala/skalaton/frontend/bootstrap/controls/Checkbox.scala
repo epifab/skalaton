@@ -13,8 +13,8 @@ object Checkbox {
   private val component = ScalaFn[Props] { props =>
     <.div(^.cursor := "pointer",
       <.div(
-        if (props.toggled) Icon.squareTick(onClick = props.onToggle(false))
-        else Icon.square(onClick = props.onToggle(true)),
+        if (props.toggled) Icon.squareTick(onClick = Some(props.onToggle(false)))
+        else Icon.square(onClick = Some(props.onToggle(true))),
         " ",
         props.label
       )
