@@ -1,15 +1,14 @@
 package skalaton.webapp
 
 import cats.effect.{Blocker, ExitCode, IO, IOApp}
-import skalaton.webapp.routes.{Health, Home, PeopleApi, Static}
 import org.fusesource.scalate.TemplateEngine
 import org.http4s.HttpRoutes
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.GZip
-import skalaton.domain.repositories.PersonRepo
-import skalaton.webapp.repositories.{InMemoryAddressRepo, InMemoryPersonRepo}
+import skalaton.webapp.repositories.{InMemoryContactRepo, InMemoryPersonRepo}
+import skalaton.webapp.routes.{Health, Home, PeopleApi, Static}
 import skalaton.webapp.services.PeopleServiceProvider
 
 import scala.concurrent.ExecutionContext.global
@@ -22,7 +21,7 @@ object Main extends IOApp {
     val templateEngine = new TemplateEngine()
     val peopleService = new PeopleServiceProvider[IO](
       InMemoryPersonRepo,
-      InMemoryAddressRepo
+      InMemoryContactRepo
     )
 
     Router(

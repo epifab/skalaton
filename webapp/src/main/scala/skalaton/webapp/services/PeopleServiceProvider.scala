@@ -1,17 +1,16 @@
 package skalaton.webapp.services
 
-import java.time.LocalDate
 import java.util.UUID
 
 import cats.data.EitherT
-import cats.{Monad, MonadError}
+import cats.effect.Sync
 import cats.implicits._
-import cats.effect.{IO, Sync}
-import skalaton.domain.model.{Address, Person}
-import skalaton.domain.repositories.{AddressRepo, PersonRepo}
-import skalaton.domain.services.{AddPersonRequest, PeopleService, PersonDetails, ServiceError}
+import cats.{Monad, MonadError}
+import skalaton.domain.model.{Contact, Person}
+import skalaton.domain.repositories.{ContactRepo, PersonRepo}
+import skalaton.domain.services._
 
-class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], addressRepo: AddressRepo[F])(implicit me: MonadError[F, Throwable]) extends PeopleService[F] {
+class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], contactRepo: ContactRepo[F])(implicit me: MonadError[F, Throwable]) extends PeopleService[F] {
 
   private def handleFailure[A](fallible: F[A]): EitherT[F, ServiceError, A] =
     EitherT(MonadError[F, Throwable].redeemWith(fallible)(
@@ -23,10 +22,10 @@ class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], addre
     (for {
       id <- EitherT.right[ServiceError](Sync[F].delay(UUID.randomUUID))
       person = Person(id, request.name, request.dateOfBirth)
-      address = request.postcode.map(postcode => Address(id, postcode))
+      contacts = request.contacts.map(cd => Contact(id, cd.value, cd.contactType))
       _ <- handleFailure(personRepo.add(person))
-      _ <- handleFailure(address.fold(Monad[F].pure(()))(addressRepo.add))
-      personDetails = PersonDetails(person, address)
+      _ <- handleFailure(contacts.map(contactRepo.add).sequence)
+      personDetails = PersonDetails(person, contacts.map(c => ContactData(c.value, c.contactType)))
     } yield personDetails).value
 
   override def removePerson(id: UUID): F[Either[ServiceError, Unit]] =
@@ -36,14 +35,21 @@ class PeopleServiceProvider[F[_]: Monad : Sync](personRepo: PersonRepo[F], addre
         case None => Left(ServiceError.NotFound)
         case Some(_) => Right(())
       })
-      _ <- handleFailure(addressRepo.remove(id))
+      _ <- handleFailure(contactRepo.remove(id))
       _ <- handleFailure(personRepo.remove(id))
     } yield ()).value
 
   override def findAllPeople: F[Either[ServiceError, List[PersonDetails]]] =
     (for {
       people <- handleFailure(personRepo.findAll)
-      peopleDetails <- handleFailure(people.map(person => addressRepo.findById(person.id).map(PersonDetails(person, _))).sequence)
+      contacts <- handleFailure(contactRepo.findByIds(people.map(_.id)))
+      contactsById = contacts.groupBy(_.personId)
+      peopleDetails = people.map(person =>
+        PersonDetails(
+          person,
+          contactsById.getOrElse(person.id, List.empty).map(c => ContactData(c.value, c.contactType))
+        )
+      )
     } yield peopleDetails).value
 
 }

@@ -5,15 +5,21 @@ import java.util.UUID
 
 import io.circe.Codec
 import io.circe.generic.semiauto._
-import skalaton.domain.model.{Address, Person}
+import skalaton.domain.model.{ContactType, Person}
 
-case class PersonDetails(person: Person, address: Option[Address])
+case class PersonDetails(person: Person, contacts: List[ContactData])
 
 object PersonDetails {
   implicit val codec: Codec[PersonDetails] = deriveCodec
 }
 
-case class AddPersonRequest(name: String, dateOfBirth: LocalDate, postcode: Option[String])
+case class ContactData(value: String, contactType: ContactType)
+
+object ContactData {
+  implicit val codec: Codec[ContactData] = deriveCodec
+}
+
+case class AddPersonRequest(name: String, dateOfBirth: LocalDate, contacts: List[ContactData])
 
 object AddPersonRequest {
   implicit val codec: Codec[AddPersonRequest] = deriveCodec

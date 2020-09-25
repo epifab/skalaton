@@ -28,6 +28,10 @@ object Icon {
 
   val squareTick = new Icon("check-square")
 
+  val phone = new Icon("phone")
+
+  val email = new Icon("envolope")
+
   val spin = new Icon("spinner", spin = true)
 
 }

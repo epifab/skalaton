@@ -5,8 +5,10 @@ import japgolly.scalajs.react.component.Scala
 import japgolly.scalajs.react.component.Scala.BackendScope
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom.html.Element
-import skalaton.domain.services.{PersonDetails, ServiceError}
+import skalaton.domain.model.ContactType.{Email, Phone}
+import skalaton.domain.services.{ContactData, PersonDetails, ServiceError}
 import skalaton.frontend.bootstrap.Alert
+import skalaton.frontend.bootstrap.list.UnorderedList
 import skalaton.frontend.bootstrap.styles.Style
 import skalaton.frontend.bootstrap.table.Table
 import skalaton.frontend.fontawesome.{Icon, Size}
@@ -29,12 +31,17 @@ object PeopleTable {
           Table(
             headers = List(List(
               Table.Cell("Name"),
-              Table.Cell("Postcode")
+              Table.Cell("Contacts")
             )),
             data = people.map(person =>
               List(
                 Table.Cell(person.person.name),
-                Table.Cell(person.address.fold("<No address>")(_.postcode))
+                Table.Cell(
+                  UnorderedList(person.contacts.map {
+                    case ContactData(email, Email) => <.p(Icon.email(), " ", email)
+                    case ContactData(phone, Phone) => <.p(Icon.phone(), " ", phone)
+                  })
+                )
               )
             )
           )
